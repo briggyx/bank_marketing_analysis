@@ -1,0 +1,13 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+# Ensure specific files are handled as binary (no line ending conversion)
+data/bootstrap_samples_n10000.pkl filter=lfs diff=lfs merge=lfs -text
+data/bootstrap_samples_n1000.pkl filter=lfs diff=lfs merge=lfs -text
+# Force specific file types to use LF
+*.md text eol=lf
+*.py text eol=lf
+*.ipynb text eol=lf
+# Force specific file types to use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+C:/Users/brigi/OneDrive/Documents/bank_marketing_excel_analysis/data/bootstrap_samples_n1000.pkl filter=lfs diff=lfs merge=lfs -text
