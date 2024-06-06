@@ -37,12 +37,12 @@ The version of Excel that I used is [Professional Plus 2021](https://learn.micro
 The dataset concerns the direct marketing initiatives conducted by a bank in Portugal, primarily executed through phone calls. It was common for multiple attempts to be made to engage the same client, aimed at having them subscribe to a bank term deposit. The original intention of this dataset was for creating machine learning models to predict whether a client will subscribe to a term deposit (last column).
 
 **What is a term deposit and how is it important?**
-> When funds are deposited in a regular bank account, the bank can use lend the funds to others. In exchange for this, depositors receive interest on their balance. Most accounts allow withdrawals at any time, making it hard for banks to predict lending capacity. To address this, banks offer **term deposit accounts**. Customers agree not to withdraw funds for a fixed period in exchange for higher interest rates. Typically, these investments have short-term maturities, lasting from a month to several years, and require varying minimum deposits. The funds cannot be withdrawn until the term ends. ([Investopedia]('https://www.investopedia.com/terms/t/termdeposit.asp'))
+> When funds are deposited in a regular bank account, the bank can lend the funds to others. In exchange for this, depositors receive interest on their balance. Most accounts allow withdrawals at any time, making it hard for banks to predict lending capacity. To address this, banks offer **term deposit accounts**. Customers agree not to withdraw funds for a fixed period in exchange for higher interest rates. Typically, these investments have short-term maturities, lasting from a month to several years, and require varying minimum deposits. The funds cannot be withdrawn until the term ends. ([Investopedia]('https://www.investopedia.com/terms/t/termdeposit.asp'))
 
 > Term deposits increase banks' lending capabilities by enlarging the pool of funds from which they can lend to individuals and businesses, thus earning more interest revenue. This is particularly significant for small and emerging banks with limited resources. Analyzing the factors that influence customer enrollment in term deposits through marketing campaigns can empower banks to design more impactful strategies, resulting in increased enrollment and, consequently, a larger lending pool and higher revenues.
 
 
-Dataset Size: 45211 records, 17 columns.
+Dataset Size: 45,211 records, 17 columns.
 Each row represents an event in which a customer was contacted as a part of the marketing campaign, and several rows may refer to the same customer, although there is no key for customer IDs. 
 
 
@@ -51,7 +51,7 @@ Each row represents an event in which a customer was contacted as a part of the 
 | 1   | age       | Numerical: the age of the client. |
 | 2   | job       | Categorical: the type of job ("admin.", "unknown", "unemployed", "management", "housemaid", "entrepreneur", "student", "blue-collar", "self-employed", "retired", "technician", "services"). |
 | 3   | marital   | Categorical: marital status ("married", "divorced", "single"; note: "divorced" includes widowed). |
-| 4   | education | Categorical: level of education ("unknown", "secondary", "primary", "tertiary"). |
+| 4   | education | Categorical (Ordinal): level of education ("unknown", "secondary", "primary", "tertiary"). |
 | 5   | default   | Binary: has credit in default? ("yes", "no"). |
 | 6   | balance   | Numeric: average yearly balance in euros. |
 | 7   | housing   | Binary: has housing loan? ("yes", "no"). |
@@ -70,12 +70,21 @@ Each row represents an event in which a customer was contacted as a part of the 
 
 
 ----------------------------------
-### Initial Assumptions<a name="assumptions"></a>
+### Initial Assumptions & Questions<a name="assumptions"></a>
 
 
 Given what I know about term deposits and human behaviour, these are my initial assumptions about the features, without having looked at the data at all. These assumptions serve as a point at which I'll begin my analysis, to accept or refute:
-- Positive correlations exhibited between: age, job, marital, education, balance, duration, y (term loan success). 
+- Positive correlations exhibited between: age, job, marital, education, balance, default, y (term loan success). 
 - Negative correlations between: housing, loan, default, y (term loan success). The reason for this assumption is that, people with more loans are more in need to cash and less able to put it away for a period.
+- negative correlation between personal/house loans and balance 
+
+Questions:
+- Holidays in Spain that might affect the final decision
+- what types of loans are these "personal loans"?
+- what are the values of personal and housing loans?
+- incomes?
+- number of loans in total?
+- duration, interest rate, amount of the term deposit account being marketed 
 
 
 
@@ -96,7 +105,7 @@ Given what I know about term deposits and human behaviour, these are my initial 
 - looking at the values of skewness and kurtosis, many columns are not normal, and since normality is preferred for calculating the confidence level, and is assumed for other statistical tests like the t-test, I need to calculate the sample means and SE with bootstrapping with replacement, which will be more "normal" than the original distribution due to the CLT 
 - Distributions are considered highly skewed if their skewness is below -1 or above 1, moderately skewed if skewness falls between -1 and -0.5 or between 0.5 and 1, and approximately symmetric if skewness lies between -0.5 and 0.5.
 - for my bootstrap with replacement, each sample will be the same as the size of the original set of data to ensure that the bootstrap samples are representative of the original data. 
-- I'm going to use 1000, 5000 and 10,000 as my number of repeats (n)
+- I'm going to use 1000 as my number of repeats (n)
 -since there are so many samples, I will use VBA--> this threw and error when I tried to run the macros because of the sheer size of n and samples per n
 - calculate trimmed mean for ea. column since it's more robust against outliers
 - noticed that, for features with relatively "normal" skewness and kurtosis (or close to normal), the trimmed mean is closer to the original mean 
@@ -127,7 +136,8 @@ The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic
 -------------------------
 ### Concluding Remarks<a name="conclusion"></a>
 
-
+- being able to predict whether a client will subscribe to a term plan in the next contact during the campaign can help small banks optimize their resources to strategically decide when to contact, who to contact
+- more term deposits means a larger pool of money the bank can loan out to generate revenues from interest, which means growth for the bank 
 
 -----------------------
 ### Contact<a name="contact"></a>
