@@ -77,6 +77,7 @@ Given what I know about term deposits and human behaviour, these are my initial 
 - Positive correlations exhibited between: age, job, marital, education, balance, default, y (term loan success). 
 - Negative correlations between: housing, loan, default, y (term loan success). The reason for this assumption is that, people with more loans are more in need to cash and less able to put it away for a period.
 - negative correlation between personal/house loans and balance 
+- 
 
 Questions:
 - Holidays in Spain that might affect the final decision
@@ -95,6 +96,8 @@ Questions:
 - created separate df for the dummies only, saved as xlsx 
 - kept separate df without dummies, and only mapping from months (str) to numbers 1-2; saved as xlsx
 - combined the two dfs along column axis so that I can have all the dummies as well as the original columns on one sheet; saved as xlsx 
+- set -1 pdays to NaN
+- convert 'education' to integers from strings, since it's an ordinal variable, set 'unknown' to NaN
 
 
 
@@ -110,7 +113,7 @@ Questions:
 - calculate trimmed mean for ea. column since it's more robust against outliers
 - noticed that, for features with relatively "normal" skewness and kurtosis (or close to normal), the trimmed mean is closer to the original mean 
 
-
+- correspond analysis btwn poutcome and other categorical var. e.g. married, education, ...
 
 
 - instead, I'll do the bootstrap with python 
@@ -138,6 +141,7 @@ The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic
 
 - being able to predict whether a client will subscribe to a term plan in the next contact during the campaign can help small banks optimize their resources to strategically decide when to contact, who to contact
 - more term deposits means a larger pool of money the bank can loan out to generate revenues from interest, which means growth for the bank 
+- the info in the given dataframe is pretty general and could be found with a simple credit check and client profile view; even though it would be beneficial to have more detailed info, this dataset strikes a decent balance between easy to acquire and detailed-enough 
 
 -----------------------
 ### Contact<a name="contact"></a>
