@@ -121,6 +121,40 @@ Questions:
 The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic) indicates that the distribution is less peaked and has lighter tails than a normal distribution, meaning it has fewer extreme values. Conversely, having a higher kurtosis (leptokurtic) indicates that the distribution is more peaked and has heavier tails than a normal distribution, suggesting more extreme values present in the data.
 
 
+- based on variables with notable correlations, I'll conduct 2-tailed two-sample t-tests and ANOVAS to gauge if differences between categories are significant 
+- also conduct chi-square test
+
+
+#### Notable Positive Correlations
+- day & campaign: 0.162490216
+- poutcome_unknown & balance: 0.233804984
+- y_yes & balance: 0.106048857
+- pdays & education: 0.162490216
+- married & blue-collar: 0.162490216
+- housing loan & blue-collar: 0.177474869
+- no house loan & retired: 0.15663267
+- no house loan & cellular:
+- poutcome_success & cellular: 0.104665486
+- poutcome_failure & cellular: 0.20173155
+
+- ***y_yes & cellular: 0.135872936***
+- contact_unknown & y_no : 0.150934971 
+- poutcome_unknown & cellular: -0.264425506
+
+
+
+
+
+
+
+
+#### Notable Negative Correlations
+- pdays & month_number: -0.206171257
+- poutcome_failure & balance: -0.174939044
+- y_no & balance: -0.106048857
+
+
+
 
 
 
