@@ -145,22 +145,24 @@ The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic
 
 
 
-
-
 #### Notable Negative Correlations
 
 
 
 
-DO IN EXCEL:
-- correspondence analysis
 - pca, scree plot 
 - clustering 
+
+PCA:
+- in excel, bank_dummiesonly.xlsx was used since it contains only numerical variables & dummies, one column from each dummy group was deleted to prevent multicollinearity
+
 
 
 
 ----------------------------------
 ### Dashboard<a name="features"></a>
+
+
 
 
 
