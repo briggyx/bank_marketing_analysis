@@ -126,15 +126,18 @@ The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic
 - two-sample t-tests (alpha= 0.05): 
   - y_yes/y_no vs. balance 
 
+
+
 - chi-square test(alpha= 0.05):
   - housing vs. yes/no
   - poutcome vs. yes/no 
+   - contact method vs. yes/no
+  - contact method vs. poutcome
 
 
 - one-way ANOVA (alpha= 0.05):
   - poutcome vs. balance 
-  - contact method vs. yes/no
-  - contact method vs. poutcome
+ 
 
 
 
