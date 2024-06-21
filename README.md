@@ -43,12 +43,12 @@ The dataset concerns the direct marketing initiatives conducted by a bank in Por
 
 
 Dataset Size: 45,211 records, 17 columns.
-Each row represents an event in which a customer was contacted as a part of the marketing campaign, and several rows may refer to the same customer, although there is no key for customer IDs. 
+Each row represents an event in which a customer was contacted as a part of the marketing campaign, and several rows may refer to the same customer, although there is no key for customer IDs. 10 columns are categorical (nominal/ordinal/binary), 7 are numeric. 
 
 
 | Column No. | Attribute | Description |
 |-----|-----------|-------------|
-| 1   | age       | Numerical: the age of the client. |
+| 1   | age       | Numeric: the age of the client. |
 | 2   | job       | Categorical: the type of job ("admin.", "unknown", "unemployed", "management", "housemaid", "entrepreneur", "student", "blue-collar", "self-employed", "retired", "technician", "services"). |
 | 3   | marital   | Categorical: marital status ("married", "divorced", "single"; note: "divorced" includes widowed). |
 | 4   | education | Categorical (Ordinal): level of education ("unknown", "secondary", "primary", "tertiary"). |
@@ -141,6 +141,26 @@ The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic
 
 
 
+possible interaction factors:
+- education & marital
+- education & job
+- balance & housing
+- balance & loan 
+- age & job 
+
+
+
+
+possible confounding factors:
+- holidays, weekends 
+- income of spouse, number of children
+- location 
+- other debts
+- primary language 
+- gender/sex
+
+
+
 #### Notable Positive Correlations
 
 
@@ -155,6 +175,8 @@ The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic
 
 PCA:
 - in excel, bank_dummiesonly.xlsx was used since it contains only numerical variables & dummies, one column from each dummy group was deleted to prevent multicollinearity
+- based on the scree plot & elbow plot, the PC1-3 were used 
+-omit pdays col, since it's mostly NaNs
 
 
 
@@ -162,6 +184,9 @@ PCA:
 ----------------------------------
 ### Dashboard<a name="features"></a>
 
+- the slicers are the categorical variables e.g. job, marital, education, etc...
+- the KPIs are mostly the numeric values 
+- the graphs show relationships that were found to be significant from hypothesis tests 
 
 
 
@@ -177,6 +202,8 @@ PCA:
 - being able to predict whether a client will subscribe to a term plan in the next contact during the campaign can help small banks optimize their resources to strategically decide when to contact, who to contact
 - more term deposits means a larger pool of money the bank can loan out to generate revenues from interest, which means growth for the bank 
 - the info in the given dataframe is pretty general and could be found with a simple credit check and client profile view; even though it would be beneficial to have more detailed info, this dataset strikes a decent balance between easy to acquire and detailed-enough 
+
+
 
 -----------------------
 ### Contact<a name="contact"></a>
