@@ -8,24 +8,21 @@
 
 -------------------------------
 ### Introduction
-- The dataset concerns the direct marketing initiatives conducted by a bank in Portugal, primarily executed through phone calls. It was common for multiple attempts to be made to engage the same client, aimed at having them subscribe to a bank term deposit. The original intention of this dataset was for creating machine learning models to predict whether a client will subscribe to a term deposit (last column).
+The purpose of this project is to uncover insights from a dataset on term deposit marketing campaigns conducted by a bank in Portugal. Term deposits enhance banks' lending capabilities by locking in customer funds for a fixed period in exchange for higher interest rates. Analyzing factors influencing term deposit enrollments helps banks design effective marketing strategies, ultimately boosting enrollment and increasing their lending pool and revenues from interest payments from borrowers. 
 
-**What is a term deposit and how is it important?**
-> When funds are deposited in a regular bank account, the bank can lend the funds to others. In exchange for this, depositors receive interest on their balance. Most accounts allow withdrawals at any time, making it hard for banks to predict lending capacity. To address this, banks offer **term deposit accounts**. Customers agree not to withdraw funds for a fixed period in exchange for higher interest rates. Typically, these investments have short-term maturities, lasting from a month to several years, and require varying minimum deposits. The funds cannot be withdrawn until the term ends. ([Investopedia]('https://www.investopedia.com/terms/t/termdeposit.asp'))
-
-> Term deposits increase banks' lending capabilities by enlarging the pool of funds from which they can lend to individuals and businesses, thus earning more interest revenue. This is particularly significant for small and emerging banks with limited resources. Analyzing the factors that influence customer enrollment in term deposits through marketing campaigns can empower banks to design more impactful strategies, resulting in increased enrollment and, consequently, a larger lending pool and higher revenues.
-
+To begin, I formulated several hypotheses based on domain knowledge for validation during analysis. I then formatted the data by creating dummy variables for categorical data and enumerating ordinal data. Next, I conducted a correlation analysis, bootstrapped with replacement to find confidence intervals, and performed hypothesis testing. Finally, I carried out PCA and k-means clustering. The results of my analysis informed the graphs included in my Excel dashboard, which succinctly captured the data patterns. This analysis can help small banks optimize their marketing strategies for term loans, ultimately increasing their lending pool and interest revenues and driving faster growth of the bank as a whole. 
 
 -----------------------------
 ### Table Of Contents
 
 1. [Repository Structure](#repository)
-4. [Software Requirements](#installation)
+4. [Software Requirements & Packages](#installation)
 2. [Dataset](#dataset)
 4. [Hypothesis](#hypothesis)
 4. [Data Wrangling](#wrangling)
 6. [Analysis](#analysis)
-6. [Results](#key)
+6. [Results](#results)
+6. [Discussion](#discussion)
 3. [Dashboard](#dashboard)
 7. [Conclusion](#conclusion)
 8. [Contact](#contact)
@@ -93,21 +90,17 @@
 </details>
 
 -------------------------------
-### Software Requirements<a name="installation"></a>
-- [Excel Professional Plus 2021](https://learn.microsoft.com/en-us/deployoffice/ltsc2021/overview)
+### Software Requirements & Packages<a name="installation"></a>
+- [Microsoft Excel 2021](https://learn.microsoft.com/en-us/deployoffice/ltsc2021/overview)
 - Windows 10/11
 - Python 3.10
+- Pandas, Numpy, Scipy, Matplotlib, Seaborn, Sklearn, mpl_toolkits, Pickle 
 
 ----------------------------------
 ### Dataset<a name="dataset"></a>
  [UC Irvine ML Library-- Bank Marketing]('https://archive.ics.uci.edu/dataset/222/bank+marketing')
 
-
-
-
-
-Dataset Size: 45,211 records, 17 columns.
-Each row represents an event in which a customer was contacted as a part of the marketing campaign, and several rows may refer to the same customer, although there is no key for customer IDs. 10 columns are categorical (nominal/ordinal/binary), 7 are numeric. 
+The dataset comprises 45,211 records across 17 columns. Each row represents a customer contact event in a marketing campaign, with potential for multiple rows per customer, though customer IDs are not provided. Of the columns, 10 are categorical (including nominal, ordinal, and binary types), while 7 are numeric.
 
 <details>
   <summary>Click to see the column headers.</summary>
@@ -139,66 +132,215 @@ Each row represents an event in which a customer was contacted as a part of the 
 ----------------------------------
 ### Hypothesis<a name="hypothesis"></a> 
 
+Based on my understanding of term deposits and human behavior, these initial assumptions about the features will guide my analysis. They can be validated or refuted based on the results of the analysis:
 
-Given what I know about term deposits and human behaviour, these are my initial assumptions about the features, without having looked at the data at all. These assumptions serve as a point at which I'll begin my analysis, to accept or refute:
-- Positive correlations exhibited between: age, job, marital, education, balance, default, y (term loan success). 
-- Negative correlations between: housing, loan, default, y (term loan success). The reason for this assumption is that, people with more loans are more in need to cash and less able to put it away for a period.
-- negative correlation between personal/house loans and balance 
-- 
-
-
-
+- Positive correlations expected with: age, job, marital status, education level, balance, and term deposit success. his assumption stems from the idea that individuals who have higher levels of education, employment and marriage are in a better position to subscribe to term loans. 
+- Negative correlations anticipated with: housing loan status, personal loan status, default status, and term deposit success. This assumption stems from the idea that individuals with more loans may have less disposable income to commit to term deposits.
 
 
 ----------------------------------
 ### Data Wrangling<a name="wrangling"></a> 
 
-- created dummy variables for categorical variables e.g. marital, house, default, ...
-- created separate df for the dummies only, saved as xlsx 
-- kept separate df without dummies, and only mapping from months (str) to numbers 1-2; saved as xlsx
-- combined the two dfs along column axis so that I can have all the dummies as well as the original columns on one sheet; saved as xlsx 
-- set -1 pdays to NaN
-- convert 'education' to integers from strings, since it's an ordinal variable, set 'unknown' to NaN
-
+- Generated dummy variables for categorical attributes: job, education, default, housing, loan, contact, poutcome, y, and marital.
+- Created a new column, month_number, to represent months with enumerated names.
+- Converted 'education' from string to integer to treat it as an ordinal variable, replacing 'unknown' with NaN.
+- Consolidated all original and new columns into a unified dataframe, saving it as an Excel file named bank_combined.xlsx.
+- Replaced -1 values in pdays with NaN.
 
 
 ----------------------------------
 ### Analysis<a name="analysis"></a>
 
-- the analysis toolpak's descriptive statistics module swiftly calculates metrics like mean, SE, variance, etc... but this is based on the data distribution and not the sample distribution
-- looking at the values of skewness and kurtosis, many columns are not normal, and since normality is preferred for calculating the confidence level, and is assumed for other statistical tests like the t-test, I need to calculate the sample means and SE with bootstrapping with replacement, which will be more "normal" than the original distribution due to the CLT 
-- Distributions are considered highly skewed if their skewness is below -1 or above 1, moderately skewed if skewness falls between -1 and -0.5 or between 0.5 and 1, and approximately symmetric if skewness lies between -0.5 and 0.5.
-- for my bootstrap with replacement, each sample will be the same as the size of the original set of data to ensure that the bootstrap samples are representative of the original data. 
-- I'm going to use 1000 as my number of repeats (n)
--since there are so many samples, I will use VBA--> this threw and error when I tried to run the macros because of the sheer size of n and samples per n
-- calculate trimmed mean for ea. column since it's more robust against outliers
-- noticed that, for features with relatively "normal" skewness and kurtosis (or close to normal), the trimmed mean is closer to the original mean 
+First, I did a correlation analysis in Excel to find patterns to explore further through hypothesis testing:
+<details>
+  <summary>Click to expand.</summary>
 
-- correspond analysis btwn poutcome and other categorical var. e.g. married, education, ...
+  ![heatmap](images\correlation_heatmap.png)
+</details>
+<br>
+The Excel Analysis Toolpak's descriptive statistics module efficiently computes metrics like mean, standard error (SE), and variance for numeric variables. However, these calculations are based on the data distribution itself rather than on the distribution of sample means. Consequently, metrics such as mean, SE, and skewness may appear larger when the data distributions deviate from normality. This issue is particularly significant for calculating the confidence interval.
+
+<details>
+  <summary>Click to expand.</summary>
+  
+![Excel Analysis](images/excel_analysis.png)
+</details>
+<br>
+I've verified this observation by plotting the histograms of several numeric variables, which depict distributions that indeed deviate from normality.
+<details>
+  <summary>Click to expand.</summary>
+
+<div style="display: flex; justify-content: center;">
+  <div style="margin: 10px;">
+    <img src="images/histogram_age.png" width="400" alt="Histogram Age">
+  </div>
+  <div style="margin: 10px;">
+    <img src="images/histogram_balance_with_stats.png" width="400" alt="Histogram Balance">
+  </div>
+</div>
+
+<div style="display: flex; justify-content: center;">
+  <div style="margin: 10px;">
+    <img src="images/histogram_campaign_with_stats.png" width="400" alt="Histogram Campaign">
+  </div>
+  <div style="margin: 10px;">
+    <img src="images/histogram_duration_with_stats.png" width="400" alt="Histogram Duration">
+  </div>
+</div>
+
+<div style="display: flex; justify-content: center;">
+  <div style="margin: 10px;">
+    <img src="images/histogram_education.png" width="400" alt="Histogram Education">
+  </div>
+  <div style="margin: 10px;">
+    <img src="images/histogram_monthnum_with_stats.png" width="400" alt="Histogram Month">
+  </div>
+</div>
+
+<div style="display: flex; justify-content: center;">
+  <div style="margin: 10px;">
+    <img src="images/histogram_pdays_with_stats.png" width="400" alt="Histogram PDays">
+  </div>
+  <div style="margin: 10px;">
+    <img src="images/histogram_previous_with_stats.png" width="400" alt="Histogram Previous">
+  </div>
+</div>
+
+</details>
+<br>
 
 
-- instead, I'll do the bootstrap with python 
+Since normality is preferred for confidence level calculations and assumed for statistical tests like the t-test, I generated additional samples using bootstrapping with replacement. As predicted by the central limit theorem, the resulting sample means distributions approximates normality better than the original distributions.
 
-The kurtosis of a normal distribution is 3. Having a lower kurtosis (platykurtic) indicates that the distribution is less peaked and has lighter tails than a normal distribution, meaning it has fewer extreme values. Conversely, having a higher kurtosis (leptokurtic) indicates that the distribution is more peaked and has heavier tails than a normal distribution, suggesting more extreme values present in the data.
+<details>
+  <summary>Click to expand.</summary>
+<div style="display: flex; justify-content: center;">
+  <div style="margin: 10px;">
+    <img src="images\bootstrap_means_age.png" width="400" alt="Histogram Age">
+  </div>
+  <div style="margin: 10px;">
+    <img src="images\bootstrap_means_balance.png" width="400" alt="Histogram Balance">
+  </div>
+</div>
+
+<div style="display: flex; justify-content: center;">
+  <div style="margin: 10px;">
+    <img src="images\bootstrap_means_duration.png" width="400" alt="Histogram Campaign">
+  </div>
+</details>
+<br>
+
+Each bootstrap sample replicates the size of the original dataset to ensure representativeness. I conducted **1000 iterations (n)** for my bootstrap with replacement.
+
+Based on patterns found in the correlations heatmap, I conducted the following hypothesis tests using bootstrapped samples (n = 1000):
+
+  - **two-sample t-tests (alpha= 0.05):** 
+    - Current campaign success (yes/no) vs. average annual balance ($)
+
+  - **chi-square test(alpha= 0.05):**
+    - House loan (yes/no) vs. current campaign success (yes/no)
+    - Previous campaign's outcome (y/n/unknown/other) vs. current campaign success (yes/no)
+    - Contact method vs. current campaign success (yes/no)
+    - Contact method vs. previous campaign's outcome (y/n/unknown/other)
+
+  - **one-way ANOVA (alpha= 0.05):**
+    - Previous campaign's outcome (y/n/unknown/other) vs. balance
+
+Lastly, I conducted a PCA analysis and k-means clustering, using a Scree Plot and Elbow Plot to find the optimal number of principal components and clusters. 
 
 
-- based on variables with notable correlations, I'll conduct 2-tailed two-sample t-tests and ANOVAS to gauge if differences between categories are significant
+--------------------
+### Results<a name="results"></a>
+The positive correlations between balance and current campaign success, no housing loan and current campaign success, current campaign failure and yes housing loan support my earlier hypothesis.
 
-- two-sample t-tests (alpha= 0.05): 
-  - y_yes/y_no vs. balance 
+**Notable positive correlations:**
+- poutcome_unknown & balance 0.233804984
+- y_yes & balance 0.106048857
+- y_yes  & housing_no 0.139172702
+- y_no & housing_yes 0.139172702
+- y_no & contact_unknown 0.150934971
+- poutcome_unknown & contact_unknown 0.291657431
+- poutcome_success & y_yes 0.306788211
+
+**Notable negative correlations:**
+- poutcome_failure & balance -0.174939044
+- poutcome_other & balance -0.102639208
+- y_yes & balance 0.106048857
+- y_no & balance -0.106048857
+- y_no & housing_no -0.139172702
+- y_yes & housing_yes -0.139172702
+- poutcome_unknown & contact_cellular -0.264425506
+- y_no & contact_cellular -0.135872936
+- y_yes & contact_unknown -0.150934971
 
 
 
-- chi-square test(alpha= 0.05):
-  - housing vs. yes/no
-  - poutcome vs. yes/no 
-   - contact method vs. yes/no
-  - contact method vs. poutcome
+**Results of the Hypothesis tests:**
+- **two-sample t-tests (alpha= 0.05):** 
+  - Current campaign success (yes/no) vs. average annual balance ($)
+    - P-value: 0.0
+    - Reject the null hypothesis: There is a significant difference between the means.
+
+- **chi-square test(alpha= 0.05):**
+  - House loan (yes/no) vs. current campaign success (yes/no)
+    - p-value: 2.918797605076633e-192
+    - Reject the null hypothesis: There is a significant association between housing and current campaign success.
+  - Previous campaign's outcome (y/n/unknown/other) vs. current campaign success (yes/no)
+    - p-value: 0.0
+    - Reject the null hypothesis: There is a significant association between the results of the last campaign and that of the current.
+  - Contact method vs. current campaign success (yes/no)
+    - p-value: 3.994899557849592e-230
+    - Reject the null hypothesis: There is a significant association between the contact method and subscription to a term deposit.
+  - Contact method vs. previous campaign's outcome (y/n/unknown/other)
+    - p-value: 0.0
+    - Reject the null hypothesis: There is a significant association between the contact method and the previous campaign's outcome.
+
+- **one-way ANOVA (alpha= 0.05):**
+  - Previous campaign's outcome (y/n/unknown/other) vs. balance
+    - P-value: 0.0
+    - Reject the null hypothesis: There is a significant difference between the groups.
+
+<img src="images\histograms_for_ANOVA2.png" width="400" alt="Histogram Balance">
+
+**PCA**
+- One column of each dummy variable was ommitted to eliminate multicollinearity, and in addition, all values were scaled to their z-scores. 
+- Looking at the scree plot, it appears that PC1, PC2 and PC3 account for most of the variation in the data.
+
+<img src="images\scree_plot.png" width="400" alt="Histogram Balance">
+<img src="images\eigenvectors_PC1to3.png" width="450" alt="Histogram Balance">
+<img src="images\PCA.png" width="400" alt="Histogram Balance">
+
+**K-Means Clustering**
+- The elbow plot didn't show a clear bend so I decided to create three clusters (k = 3).
+
+<img src="images\elbow_plot.png" width="400" alt="Histogram Balance"> 
+<img src="images\kmeans_clustering.png" width="400" alt="Histogram Balance">
 
 
-- one-way ANOVA (alpha= 0.05):
-  - poutcome vs. balance 
- 
+--------------------
+
+### Discussion<a name="discussion"></a>
+- blahblah
+
+----------------------------------
+
+
+### Dashboard<a name="dashboard"></a>
+
+- the slicers are the categorical variables e.g. job, marital, education, etc...
+- the KPIs are mostly the numeric values 
+- the graphs show relationships that were found to be significant from hypothesis tests 
+- graph of month and day of last contact 
+
+![heatmap](images\dashboard.png)
+
+
+-------------------------
+### Conclusion<a name="conclusion"></a>
+
+- being able to predict whether a client will subscribe to a term plan in the next contact during the campaign can help small banks optimize their resources to strategically decide when to contact, who to contact
+- more term deposits means a larger pool of money the bank can loan out to generate revenues from interest, which means growth for the bank 
+- the info in the given dataframe is pretty general and could be found with a simple credit check and client profile view; even though it would be beneficial to have more detailed info, this dataset strikes a decent balance between easy to acquire and detailed-enough 
 
 
 
@@ -221,50 +363,6 @@ possible confounding factors:
 - gender/sex
 
 
-
-#### Notable Positive Correlations
-
-
-
-#### Notable Negative Correlations
-
-
-- pca, scree plot 
-- clustering 
-
-PCA:
-- in excel, bank_dummiesonly.xlsx was used since it contains only numerical variables & dummies, one column from each dummy group was deleted to prevent multicollinearity
-- based on the scree plot & elbow plot, the PC1-3 were used 
--omit pdays col, since it's mostly NaNs
-
-
-
-
---------------------
-### Results<a name="key"></a>
-
-- blahblahblah
-
-
-
-----------------------------------
-### Dashboard<a name="dashboard"></a>
-
-- the slicers are the categorical variables e.g. job, marital, education, etc...
-- the KPIs are mostly the numeric values 
-- the graphs show relationships that were found to be significant from hypothesis tests 
-- graph of month and day of last contact 
-
-
-
--------------------------
-### Conclusion<a name="conclusion"></a>
-
-- being able to predict whether a client will subscribe to a term plan in the next contact during the campaign can help small banks optimize their resources to strategically decide when to contact, who to contact
-- more term deposits means a larger pool of money the bank can loan out to generate revenues from interest, which means growth for the bank 
-- the info in the given dataframe is pretty general and could be found with a simple credit check and client profile view; even though it would be beneficial to have more detailed info, this dataset strikes a decent balance between easy to acquire and detailed-enough 
-
-
 Questions:
 - Holidays in Spain that might affect the final decision
 - what types of loans are these "personal loans"?
@@ -276,7 +374,7 @@ Questions:
 
 -----------------------
 ### Contact<a name="contact"></a>
-Please email me for suggestions or feedback. 
+Feel free to email me for suggestions or feedback. 
 
 <a href="mailto:brigitte.xyan@gmail.com">
   <img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Email Me" width="30" height="30">
