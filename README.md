@@ -339,7 +339,7 @@ The positive correlations between balance and current campaign success, no housi
 
 ### Dashboard<a name="dashboard"></a>
 
-![heatmap](images\dashboard.png)
+![heatmap](images/dashboard.png)
 
 
 -------------------------
