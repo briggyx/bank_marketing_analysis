@@ -1,12 +1,7 @@
 # Bank Marketing Campaign Analysis & Dashboard 
 #### By Brigitte Yan, June 2024
 -------------------------------
-### Abstract
 
-- blah 
-
-
--------------------------------
 ### Introduction
 The purpose of this project is to uncover insights from a dataset on term deposit marketing campaigns conducted by a bank in Portugal. Term deposits enhance banks' lending capabilities by locking in customer funds for a fixed period in exchange for higher interest rates. Analyzing factors influencing term deposit enrollments helps banks design effective marketing strategies, ultimately boosting enrollment and increasing their lending pool and revenues from interest payments from borrowers. 
 
@@ -320,17 +315,29 @@ The positive correlations between balance and current campaign success, no housi
 --------------------
 
 ### Discussion<a name="discussion"></a>
-- blahblah
+
+- There is a significant correlation between having a house loan and the success of the current term loan campaign (p < 0.05), confirming my earlier hypothesis. This might be becauses individuals with house loans may have less available cash to set aside. 
+
+- Additionally, significant associations were found between the effectiveness of the previous and current marketing campaigns (p < 0.05), the contact method used and the current campaign's success (p < 0.05), and the contact method and the previous campaign's success (p < 0.05).
+
+- Furthermore, there is a notable difference in the annual average balance between clients who subscribe to term loans and those who do not (p < 0.05).
+
+- Moreover, a significant disparity exists in the annual average balance based on the outcomes of the previous marketing campaign (p < 0.05).
+
+- K-Means clustering reveals that records in Cluster 1 have high PC2 and low PC1 and PC3.
+- Cluster 2 is characterized by low PC1 and PC3 with variable PC2.
+- Cluster 3 is defined by high PC1, low PC3, and variable PC2.
+
+**Cluster Profiles**
+
+- **Cluster 1**: This cluster consists of younger clients who are less financially stable and hold lower-level jobs. They prefer cellular contact and are more likely to be single.
+- **Cluster 2**: Clients in this cluster exhibit lower financial stability, have mixed job types, and are often married. Their contact preferences and outcomes in marketing campaigns vary.
+- **Cluster 3**: This cluster is made up of more financially stable clients in higher-level jobs. They prefer cellular contact, are typically single, and have been more successful in previous marketing campaigns.
 
 ----------------------------------
 
 
 ### Dashboard<a name="dashboard"></a>
-
-- the slicers are the categorical variables e.g. job, marital, education, etc...
-- the KPIs are mostly the numeric values 
-- the graphs show relationships that were found to be significant from hypothesis tests 
-- graph of month and day of last contact 
 
 ![heatmap](images\dashboard.png)
 
@@ -338,38 +345,7 @@ The positive correlations between balance and current campaign success, no housi
 -------------------------
 ### Conclusion<a name="conclusion"></a>
 
-- being able to predict whether a client will subscribe to a term plan in the next contact during the campaign can help small banks optimize their resources to strategically decide when to contact, who to contact
-- more term deposits means a larger pool of money the bank can loan out to generate revenues from interest, which means growth for the bank 
-- the info in the given dataframe is pretty general and could be found with a simple credit check and client profile view; even though it would be beneficial to have more detailed info, this dataset strikes a decent balance between easy to acquire and detailed-enough 
-
-
-
-possible interaction factors:
-- education & marital
-- education & job
-- balance & housing
-- balance & loan 
-- age & job 
-
-
-
-
-possible confounding factors:
-- holidays, weekends 
-- income of spouse, number of children
-- location 
-- other debts
-- primary language 
-- gender/sex
-
-
-Questions:
-- Holidays in Spain that might affect the final decision
-- what types of loans are these "personal loans"?
-- what are the values of personal and housing loans?
-- incomes?
-- number of loans in total?
-- duration, interest rate, amount of the term deposit account being marketed 
+Predicting whether a client will subscribe to a term plan in the next contact during a campaign can help small banks optimize their resources by strategically deciding when and whom to contact. More term deposits result in a larger pool of money that the bank can loan out to generate revenue from interest, leading to bank growth. The information in the given dataframe is fairly general and can be obtained through a simple credit check and client profile view. While having more detailed information would be beneficial, this dataset strikes a good balance between being easy to acquire and sufficiently detailed.
 
 
 -----------------------
